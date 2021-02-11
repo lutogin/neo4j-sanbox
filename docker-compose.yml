@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    restart: always
+    ports:
+      - '34000:3000'
+      - '9229:9229'
+    environment:
+      - NEO4J_HOST=neo4j
+    depends_on:
+      - neo4j
+    networks:
+      - network
+
+  neo4j:
+    image: library/neo4j:4.2
+    container_name: neo4j
+    restart: always
+    ports:
+      - '7474:7474'
+      - '7687:7687'
+    volumes:
+      - ./neo4j/data:/data
+      - ./neo4j/import:/import
+      - ./neo4j/logs:/logs
+      - ./neo4j/plugins:/plugins
+    environment:
+      NEO4J_AUTH: neo4j/test
+      NEO4J_dbms_logs_debug_level: DEBUG
+    networks:
+      - network
+
+networks:
+  network:
+
+volumes:
+  neo4j:
