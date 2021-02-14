@@ -2,5 +2,4 @@ node_modules
 dist
 .idea
 .vscode
-neo4j/data/transactions
-neo4j/logs
+neo4j
